@@ -1,34 +1,45 @@
 import { StyleSheet } from 'react-native';
 
 export const COLORS = {
-  primary: '#1A365D',      // Deep Navy
-  secondary: '#2B6CB0',    // Vivid Blue
-  accent: '#6B46C1',       // Vibrant Purple
-  accentLight: '#FAF5FF',
-  background: '#F7FAFC',   // Clean Off-white
+  // Brand Colors
+  primary: '#0B0F19',       // Deep Dark Slate
+  secondary: '#3B82F6',     // Electric Blue
+  accent: '#8B5CF6',        // Electric Violet/Purple
+  accentLight: '#F3E8FF',
+  
+  // Gradients
+  gradientStart: '#0F172A', // Slate 900
+  gradientEnd: '#020617',   // Slate 950
+  
+  // Backgrounds
+  background: '#0B0F19',    // Dark background for premium look
+  backgroundLight: '#FFFFFF',
+  cardBg: '#1E293B',        // Slate 800
+  cardBgLight: '#F8FAFC',   // Slate 50
+  
+  // Interface
   white: '#FFFFFF',
-  textDark: '#2D3748',     // Slate Dark Gray
-  textLight: '#718096',    // Slate Cool Gray
-  border: '#E2E8F0',       // Light Slate Gray
-  success: '#38A169',      // Emerald Green
-  successLight: '#E6FFFA',
-  warning: '#DD6B20',      // Warm Amber
-  warningLight: '#FEFCBF',
-  danger: '#E53E3E',       // Red
-  dangerLight: '#FFF5F5',
-  info: '#3182CE',         // Light Blue
-  infoLight: '#EBF8FF',
-  cardBg: '#FFFFFF',
-  learn: '#3182CE',       // Blue
-  practice: '#805AD5',    // Violet
-  progress: '#319795',    // Teal
-  succeed: '#D69E2E',     // Amber
+  textDark: '#F8FAFC',      // Off-white for readability on dark
+  textLight: '#94A3B8',     // Cool Gray
+  textDarkLightMode: '#0F172A', // For light-themed items
+  border: '#334155',        // Slate 700
+  borderLight: '#E2E8F0',
+  
+  // States
+  success: '#10B981',      // Emerald Green
+  successLight: '#D1FAE5',
+  warning: '#F59E0B',      // Amber
+  warningLight: '#FEF3C7',
+  danger: '#EF4444',       // Rose Red
+  dangerLight: '#FEE2E2',
+  info: '#06B6D4',         // Cyan
+  infoLight: '#CFFAFE',
 };
 
 export const FONTS = {
   bold: 'Inter-Bold',
   medium: 'Inter-Medium',
-  regular: 'System', // system fallback if Inter is loading
+  regular: 'System', 
   light: 'Inter-Light-BETA',
   black: 'Inter-Black',
 };
@@ -37,23 +48,23 @@ export const SHADOWS = {
   light: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 3,
   },
   medium: {
-    shadowColor: '#000',
+    shadowColor: '#3B82F6',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  dark: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  glow: {
+    shadowColor: '#8B5CF6',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 10,
   },
 };
 
@@ -63,20 +74,22 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   card: {
-    backgroundColor: COLORS.cardBg || COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: 16,
     padding: 20,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     ...SHADOWS.light,
   },
   input: {
     height: 52,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#1E293B',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.border,
     paddingHorizontal: 16,
     fontSize: 15,
-    color: COLORS.textDark,
+    color: COLORS.white,
     marginBottom: 16,
   },
   button: {
@@ -84,12 +97,12 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    ...SHADOWS.light,
+    backgroundColor: COLORS.secondary,
+    ...SHADOWS.medium,
   },
   buttonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });

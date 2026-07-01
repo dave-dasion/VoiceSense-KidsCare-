@@ -7,10 +7,11 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import { COLORS, SHADOWS, FONTS } from '../../theme';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Path, Marker } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 const { width } = Dimensions.get('window');
 
@@ -59,7 +60,6 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
   const [activeNode, setActiveNode] = useState<string | null>(null);
 
   const runWorkflow = () => {
-    // Basic execution simulation
     setNodes((prev) =>
       prev.map((node) => ({
         ...node,
@@ -70,10 +70,11 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
       {/* Top Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
         </TouchableOpacity>
         <View style={styles.titleInfo}>
           <Text style={styles.headerTitle}>
@@ -140,7 +141,7 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
                 </View>
                 <View style={styles.nodeContent}>
                   <View style={styles.iconWrapper}>
-                    <Ionicons name={node.icon as any} size={20} color={COLORS.primary} />
+                    <Ionicons name={node.icon as any} size={20} color={COLORS.secondary} />
                   </View>
                   <View style={styles.nodeInfo}>
                     <Text style={styles.nodeTitle}>{node.title}</Text>
@@ -154,7 +155,7 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
               {index < nodes.length - 1 && (
                 <View style={styles.adderWrapper}>
                   <TouchableOpacity style={styles.addButton}>
-                    <Ionicons name="add" size={14} color={COLORS.primary} />
+                    <Ionicons name="add" size={14} color={COLORS.secondary} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -169,14 +170,14 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
           <View style={styles.sheetHeader}>
             <Text style={styles.sheetTitle}>Configure Connection</Text>
             <TouchableOpacity onPress={() => setActiveNode(null)}>
-              <Ionicons name="close" size={20} color={COLORS.textDark} />
+              <Ionicons name="close" size={20} color={COLORS.white} />
             </TouchableOpacity>
           </View>
           <View style={styles.sheetBody}>
             <Text style={styles.fieldLabel}>Webhook URL Endpoint</Text>
             <View style={styles.dummyInput}>
               <Text style={styles.dummyInputText} numberOfLines={1}>
-                https://nodeapi.activepieces.com/webhooks/trigger/{workflowId}
+                https://nodeapi.flowpilot.ai/webhooks/trigger/{workflowId}
               </Text>
             </View>
             <TouchableOpacity style={styles.saveSheetButton} onPress={() => setActiveNode(null)}>
@@ -203,7 +204,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.white,
   },
   backButton: {
     padding: 4,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: COLORS.textDark,
+    color: COLORS.white,
   },
   headerSub: {
     fontSize: 10,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   nodeCard: {
     width: width * 0.85,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   selectedNodeCard: {
-    borderColor: COLORS.primary,
+    borderColor: COLORS.secondary,
     borderWidth: 2,
   },
   nodeHeader: {
@@ -266,7 +266,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   nodeBadge: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#0F172A',
+    borderWidth: 1,
+    borderColor: COLORS.border,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -284,7 +286,9 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 8,
-    backgroundColor: '#EBF8FF',
+    backgroundColor: '#0F172A',
+    borderWidth: 1,
+    borderColor: COLORS.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
   nodeTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.textDark,
+    color: COLORS.white,
   },
   nodeApp: {
     fontSize: 11,
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderWidth: 1,
     borderColor: COLORS.border,
     justifyContent: 'center',
@@ -330,11 +334,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
-    ...SHADOWS.dark,
+    ...SHADOWS.medium,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
@@ -347,7 +351,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: COLORS.textDark,
+    color: COLORS.white,
     fontFamily: FONTS.bold,
   },
   sheetBody: {
@@ -360,7 +364,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   dummyInput: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#0F172A',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -372,7 +376,7 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
   },
   saveSheetButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     height: 48,
     borderRadius: 10,
     alignItems: 'center',

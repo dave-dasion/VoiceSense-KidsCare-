@@ -4,13 +4,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   SafeAreaView,
   TextInput,
   FlatList,
+  StatusBar,
 } from 'react-native';
 import { COLORS, SHADOWS, FONTS } from '../../theme';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface Workflow {
   id: string;
@@ -52,15 +53,6 @@ export default function WorkflowHomeScreen({ navigation }: any) {
       successRate: '0%',
       lastUpdated: '3 days ago',
     },
-    {
-      id: 'wf-4',
-      name: 'GitHub Commit webhook relay',
-      description: 'Ping Discord webhook whenever a push occurs in repo.',
-      status: 'Paused',
-      runsCount: 1210,
-      successRate: '95.8%',
-      lastUpdated: '1 week ago',
-    },
   ]);
 
   const filteredWorkflows = workflows.filter((wf) =>
@@ -70,13 +62,13 @@ export default function WorkflowHomeScreen({ navigation }: any) {
   const getStatusColor = (status: Workflow['status']) => {
     switch (status) {
       case 'Active':
-        return { bg: COLORS.successLight, text: COLORS.success, dot: COLORS.success };
+        return { bg: 'rgba(16, 185, 129, 0.15)', text: COLORS.success, dot: COLORS.success };
       case 'Paused':
-        return { bg: COLORS.warningLight, text: COLORS.warning, dot: COLORS.warning };
+        return { bg: 'rgba(245, 158, 11, 0.15)', text: COLORS.warning, dot: COLORS.warning };
       case 'Draft':
-        return { bg: COLORS.infoLight, text: COLORS.info, dot: COLORS.info };
+        return { bg: 'rgba(59, 130, 246, 0.15)', text: COLORS.secondary, dot: COLORS.secondary };
       case 'Failed':
-        return { bg: COLORS.dangerLight, text: COLORS.danger, dot: COLORS.danger };
+        return { bg: 'rgba(239, 68, 68, 0.15)', text: COLORS.danger, dot: COLORS.danger };
     }
   };
 
@@ -117,17 +109,19 @@ export default function WorkflowHomeScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      
       {/* Top Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()} style={styles.menuButton}>
-          <Ionicons name="menu-outline" size={28} color={COLORS.primary} />
+        <TouchableOpacity onPress={() => navigation.navigate('AuthSettings')} style={styles.menuButton}>
+          <Ionicons name="settings-outline" size={24} color={COLORS.white} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Workflow Builder</Text>
+        <Text style={styles.headerTitle}>FlowPilot Dashboard</Text>
         <TouchableOpacity
           style={styles.createButton}
           onPress={() => navigation.navigate('WorkflowCanvas', { workflowId: 'new' })}
         >
-          <Ionicons name="add" size={20} color={COLORS.white} />
+          <Ionicons name="add" size={16} color={COLORS.white} />
           <Text style={styles.createButtonText}>Create</Text>
         </TouchableOpacity>
       </View>
@@ -139,14 +133,14 @@ export default function WorkflowHomeScreen({ navigation }: any) {
           <Ionicons name="search-outline" size={20} color={COLORS.textLight} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search workflows..."
+            placeholder="Search active workflows..."
             placeholderTextColor={COLORS.textLight}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
 
-        <Text style={styles.sectionTitle}>Active Automations</Text>
+        <Text style={styles.sectionTitle}>My Automations</Text>
         
         <FlatList
           data={filteredWorkflows}
@@ -158,7 +152,7 @@ export default function WorkflowHomeScreen({ navigation }: any) {
             <View style={styles.emptyContainer}>
               <Ionicons name="git-network-outline" size={48} color={COLORS.textLight} />
               <Text style={styles.emptyTitle}>No workflows found</Text>
-              <Text style={styles.emptySub}>Create your first AI automation sequence now.</Text>
+              <Text style={styles.emptySub}>Create your first automated flow to start scaling operations.</Text>
             </View>
           }
         />
@@ -181,19 +175,18 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.white,
   },
   menuButton: {
     padding: 4,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '800',
-    color: COLORS.textDark,
+    color: COLORS.white,
     fontFamily: FONTS.bold,
   },
   createButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
@@ -215,7 +208,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -229,20 +222,21 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 14,
-    color: COLORS.textDark,
+    color: COLORS.white,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: '800',
-    color: COLORS.textDark,
-    fontFamily: FONTS.bold,
+    color: COLORS.textLight,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
     marginBottom: 12,
   },
   listContent: {
     paddingBottom: 24,
   },
   wfCard: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -262,7 +256,7 @@ const styles = StyleSheet.create({
   wfName: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textDark,
+    color: COLORS.white,
     marginBottom: 4,
   },
   wfDesc: {
@@ -292,7 +286,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: 'rgba(255, 255, 255, 0.05)',
     marginTop: 12,
     paddingTop: 12,
   },
@@ -321,7 +315,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textDark,
+    color: COLORS.white,
     marginTop: 12,
     marginBottom: 4,
   },

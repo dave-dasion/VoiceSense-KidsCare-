@@ -5,144 +5,129 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Image,
+  SafeAreaView,
+  StatusBar,
+  Alert,
 } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
-import { COLORS, SHADOWS, FONTS } from '../../theme';
-import { LinearGradient } from 'expo-linear-gradient';
+import { COLORS, FONTS, SHADOWS } from '../../theme';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-export default function ResetPasswordScreen({ navigation }: any) {
-  const { resetPassword, isLoading } = useAuth();
-  const [token, setToken] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+export default function ResetPasswordScreen({ route, navigation }: any) {
+  const { destination } = route.params || { destination: 'your-account' };
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [secureText, setSecureText] = useState(true);
-  const [secureConfirmText, setSecureConfirmText] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleResetPassword = async () => {
-    if (!token || !newPassword || !confirmPassword) {
-      alert('Please fill in all fields.');
+  // Requirements check helper
+  const checkRequirement = (regex: RegExp) => regex.test(password);
+
+  const reqs = [
+    { label: 'Minimum 8 characters', met: password.length >= 8 },
+    { label: 'At least one uppercase letter', met: checkRequirement(/[A-Z]/) },
+    { label: 'At least one lowercase letter', met: checkRequirement(/[a-z]/) },
+    { label: 'At least one numerical digit', met: checkRequirement(/[0-9]/) },
+    { label: 'At least one special character', met: checkRequirement(/[^A-Za-z0-9]/) },
+  ];
+
+  const handleResetPassword = () => {
+    const allMet = reqs.every((r) => r.met);
+    if (!allMet) {
+      Alert.alert('Validation Error', 'Password does not meet all secure complexity requirements.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Validation Error', 'Confirm password does not match.');
       return;
     }
 
-    if (newPassword !== confirmPassword) {
-      alert('Passwords do not match.');
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      alert('Password must be at least 6 characters.');
-      return;
-    }
-
-    const success = await resetPassword(token, newPassword);
-    if (success) {
-      navigation.navigate('Login');
-    }
+    Alert.alert('Password Updated', 'Your account credentials have been successfully updated.', [
+      { text: 'Log In Now', onPress: () => navigation.navigate('Login') }
+    ]);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        {/* Brand Header */}
-        <View style={styles.headerContainer}>
-          <Image
-            source={require('../../../assets/images/LOGO_blue.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>New Password</Text>
-          <Text style={styles.subtitle}>Enter verification code and set your new account password</Text>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.content}>
+        {/* Back Button */}
+        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+        </TouchableOpacity>
 
-        {/* Input Form */}
-        <View style={styles.formCard}>
-          <Text style={styles.inputLabel}>Verification Code</Text>
-          <View style={styles.inputContainer}>
-            <Ionicons name="key-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter 6-digit code"
-              placeholderTextColor={COLORS.textLight}
-              value={token}
-              onChangeText={setToken}
-              keyboardType="number-pad"
-              maxLength={6}
-              autoCapitalize="none"
-            />
-          </View>
+        {/* Title */}
+        <Text style={styles.title}>Reset Password</Text>
+        <Text style={styles.desc}>
+          Configure your new credentials for <Text style={styles.highlight}>{destination}</Text>. Ensure it meets the security matrix below.
+        </Text>
 
-          <Text style={styles.inputLabel}>New Password</Text>
-          <View style={styles.inputContainer}>
+        {/* Inputs */}
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>New Password</Text>
+          <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
             <TextInput
-              style={styles.textInput}
-              placeholder="••••••••"
+              style={styles.input}
+              placeholder="Min. 8 characters"
               placeholderTextColor={COLORS.textLight}
-              value={newPassword}
-              onChangeText={setNewPassword}
-              secureTextEntry={secureText}
+              secureTextEntry={!showPassword}
               autoCapitalize="none"
+              value={password}
+              onChangeText={setPassword}
             />
-            <TouchableOpacity style={styles.eyeButton} onPress={() => setSecureText(!secureText)}>
-              <Ionicons name={secureText ? "eye-off-outline" : "eye-outline"} size={20} color={COLORS.textLight} />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.togglePassword}>
+              <Ionicons
+                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                color={COLORS.textLight}
+              />
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.inputLabel}>Confirm New Password</Text>
-          <View style={styles.inputContainer}>
+          {/* Requirements Checklist */}
+          <View style={styles.checklistContainer}>
+            {reqs.map((req, index) => (
+              <View key={index} style={styles.checkRow}>
+                <Ionicons
+                  name={req.met ? 'checkmark-circle' : 'ellipse-outline'}
+                  size={15}
+                  color={req.met ? COLORS.success : COLORS.textLight}
+                  style={styles.checkIcon}
+                />
+                <Text style={[styles.checkText, req.met && styles.checkTextMet]}>{req.label}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.label}>Confirm New Password</Text>
+          <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
             <TextInput
-              style={styles.textInput}
-              placeholder="••••••••"
+              style={styles.input}
+              placeholder="Re-enter password"
               placeholderTextColor={COLORS.textLight}
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              secureTextEntry={secureConfirmText}
-              autoCapitalize="none"
             />
-            <TouchableOpacity style={styles.eyeButton} onPress={() => setSecureConfirmText(!secureConfirmText)}>
-              <Ionicons name={secureConfirmText ? "eye-off-outline" : "eye-outline"} size={20} color={COLORS.textLight} />
-            </TouchableOpacity>
           </View>
 
-          {/* Reset Button */}
-          <TouchableOpacity style={styles.resetButton} onPress={handleResetPassword} disabled={isLoading}>
+          {/* Reset Trigger */}
+          <TouchableOpacity style={styles.submitBtn} onPress={handleResetPassword}>
             <LinearGradient
-              colors={[COLORS.primary, COLORS.secondary]}
+              colors={[COLORS.secondary, COLORS.accent]}
               start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+              end={{ x: 1, y: 1 }}
               style={styles.gradientButton}
             >
-              {isLoading ? (
-                <ActivityIndicator color={COLORS.white} size="small" />
-              ) : (
-                <Text style={styles.resetButtonText}>Update Password</Text>
-              )}
+              <Text style={styles.submitBtnText}>Update Password</Text>
+              <Ionicons name="shield-checkmark-outline" size={20} color={COLORS.white} style={{ marginLeft: 6 }} />
             </LinearGradient>
           </TouchableOpacity>
-
-          {/* Cancel */}
-          <View style={styles.loginContainer}>
-            <TouchableOpacity 
-              style={{ flexDirection: 'row', alignItems: 'center' }} 
-              onPress={() => navigation.navigate('Login')}
-            >
-              <Ionicons name="arrow-back-outline" size={16} color={COLORS.secondary} style={{ marginRight: 4 }} />
-              <Text style={styles.loginLink}>Cancel & Return to Login</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -151,96 +136,109 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
+  content: {
+    flex: 1,
     paddingHorizontal: 24,
-    paddingVertical: 40,
-  },
-  headerContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 32,
   },
-  logoImage: {
-    width: 90,
-    height: 90,
-    marginBottom: 16,
+  backBtn: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    padding: 8,
   },
   title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: COLORS.primary,
+    fontSize: 24,
+    fontWeight: '900',
+    color: COLORS.white,
     fontFamily: FONTS.black,
+    marginBottom: 12,
+    alignSelf: 'flex-start',
   },
-  subtitle: {
+  desc: {
     fontSize: 14,
     color: COLORS.textLight,
-    textAlign: 'center',
-    marginTop: 6,
-    paddingHorizontal: 20,
-    fontFamily: FONTS.regular,
+    lineHeight: 22,
+    marginBottom: 28,
+    alignSelf: 'flex-start',
   },
-  formCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: 20,
-    padding: 24,
-    ...SHADOWS.medium,
+  highlight: {
+    color: COLORS.white,
+    fontWeight: '700',
   },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.textDark,
-    marginBottom: 8,
+  formContainer: {
+    width: '100%',
   },
-  inputContainer: {
+  label: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: COLORS.textLight,
+    marginBottom: 6,
+    letterSpacing: 0.5,
+  },
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#1E293B',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.border,
+    marginBottom: 16,
     height: 52,
-    paddingHorizontal: 12,
-    marginBottom: 20,
+    paddingHorizontal: 16,
   },
   inputIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
-  textInput: {
+  input: {
     flex: 1,
     height: '100%',
+    color: COLORS.white,
     fontSize: 15,
-    color: COLORS.textDark,
   },
-  eyeButton: {
-    paddingHorizontal: 8,
-    justifyContent: 'center',
+  togglePassword: {
+    padding: 4,
   },
-  resetButton: {
-    height: 52,
+  checklistContainer: {
+    backgroundColor: '#0F172A',
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    marginBottom: 16,
+  },
+  checkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 3,
+  },
+  checkIcon: {
+    marginRight: 8,
+  },
+  checkText: {
+    fontSize: 12,
+    color: COLORS.textLight,
+  },
+  checkTextMet: {
+    color: COLORS.white,
+    fontWeight: '600',
+  },
+  submitBtn: {
     borderRadius: 12,
     overflow: 'hidden',
-    marginTop: 10,
-    ...SHADOWS.light,
+    marginTop: 8,
+    ...SHADOWS.medium,
   },
   gradientButton: {
-    flex: 1,
+    height: 52,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  resetButtonText: {
+  submitBtnText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '700',
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  loginLink: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.secondary,
+    fontWeight: '800',
   },
 });

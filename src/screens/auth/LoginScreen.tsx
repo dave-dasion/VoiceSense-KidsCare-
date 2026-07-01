@@ -5,146 +5,154 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
+  SafeAreaView,
   ScrollView,
-  Image,
+  StatusBar,
+  Alert,
 } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
-import { COLORS, SHADOWS, FONTS } from '../../theme';
-import { LinearGradient } from 'expo-linear-gradient';
+import { COLORS, FONTS, SHADOWS } from '../../theme';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen({ navigation }: any) {
-  const { login, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [secureText, setSecureText] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
-      alert('Please fill in all fields.');
+      Alert.alert('Validation Error', 'Please enter both your email address and password.');
       return;
     }
-    const success = await login(email, password);
-    if (success) {
-      // AuthState updates, Navigator handles transition to App stack
-    }
+    // Navigate to OTP or directly to create workspace
+    navigation.navigate('OtpVerification', { email });
   };
 
-  const fillDemo = (role: 'Learner' | 'Administrator') => {
-    if (role === 'Learner') {
-      setEmail('emily@trainify.ai');
-      setPassword('password123');
-    } else {
-      setEmail('admin@trainify.ai');
-      setPassword('password123');
-    }
+  const handleSocialLogin = (platform: string) => {
+    Alert.alert('SSO Authentication', `Authenticating with ${platform} Single Sign-On...`, [
+      { text: 'OK', onPress: () => navigation.navigate('CreateWorkspace') }
+    ]);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        {/* Brand Header */}
-        <View style={styles.headerContainer}>
-          <Image
-            source={require('../../../assets/images/LOGO_blue.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>Trainify AI</Text>
-          <Text style={styles.subtitle}>Log in to continue your personalized coaching</Text>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Header branding */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Log in to access your automated workspace pipelines.</Text>
         </View>
 
-        {/* Input Form */}
-        <View style={styles.formCard}>
-          <Text style={styles.inputLabel}>Email Address</Text>
-          <View style={styles.inputContainer}>
+        {/* Input Fields Container */}
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>Email Address</Text>
+          <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
             <TextInput
-              style={styles.textInput}
-              placeholder="name@example.com"
+              style={styles.input}
+              placeholder="e.g. name@company.com"
               placeholderTextColor={COLORS.textLight}
-              value={email}
-              onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
 
-          <View style={styles.passwordHeader}>
-            <Text style={styles.inputLabel}>Password</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.forgotText}>Forgot?</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.inputContainer}>
+          <Text style={styles.label}>Password</Text>
+          <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color={COLORS.textLight} style={styles.inputIcon} />
             <TextInput
-              style={styles.textInput}
-              placeholder="••••••••"
+              style={styles.input}
+              placeholder="Enter account password"
               placeholderTextColor={COLORS.textLight}
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
               value={password}
               onChangeText={setPassword}
-              secureTextEntry={secureText}
-              autoCapitalize="none"
             />
-            <TouchableOpacity style={styles.eyeButton} onPress={() => setSecureText(!secureText)}>
-              <Ionicons name={secureText ? "eye-off-outline" : "eye-outline"} size={20} color={COLORS.textLight} />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.togglePassword}>
+              <Ionicons
+                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                color={COLORS.textLight}
+              />
             </TouchableOpacity>
           </View>
 
-          {/* Login Button */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
+          {/* Remember and Forgot options */}
+          <View style={styles.actionsRow}>
+            <TouchableOpacity
+              style={styles.checkboxRow}
+              onPress={() => setRememberMe(!rememberMe)}
+            >
+              <View style={[styles.checkbox, rememberMe && styles.checkboxActive]}>
+                {rememberMe && <Ionicons name="checkmark" size={12} color={COLORS.white} />}
+              </View>
+              <Text style={styles.checkboxText}>Remember Me</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+              <Text style={styles.forgotText}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Submit Button */}
+          <TouchableOpacity style={styles.submitButton} onPress={handleLogin}>
             <LinearGradient
-              colors={[COLORS.primary, COLORS.secondary]}
+              colors={[COLORS.secondary, COLORS.accent]}
               start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+              end={{ x: 1, y: 1 }}
               style={styles.gradientButton}
             >
-              {isLoading ? (
-                <ActivityIndicator color={COLORS.white} size="small" />
-              ) : (
-                <Text style={styles.loginButtonText}>Sign In</Text>
-              )}
+              <Text style={styles.submitButtonText}>Log In</Text>
+              <Ionicons name="log-in-outline" size={20} color={COLORS.white} style={{ marginLeft: 6 }} />
             </LinearGradient>
           </TouchableOpacity>
 
-          {/* Create Account */}
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.registerLink}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Biometrics quick option */}
+          <TouchableOpacity style={styles.biometricButton}>
+            <Ionicons name="finger-print" size={28} color={COLORS.secondary} />
+            <Text style={styles.biometricText}>Quick login with Face ID / Touch ID</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Quick Testing Actions */}
-        <View style={styles.demoSection}>
-          <Text style={styles.demoTitle}>Developer Demo Shortcuts</Text>
-          <View style={styles.demoButtonsContainer}>
-            <TouchableOpacity
-              style={[styles.demoButton, { borderColor: COLORS.learn, flexDirection: 'row', alignItems: 'center' }]}
-              onPress={() => fillDemo('Learner')}
-            >
-              <Ionicons name="person-outline" size={14} color={COLORS.learn} style={{ marginRight: 6 }} />
-              <Text style={[styles.demoButtonText, { color: COLORS.learn }]}>Demo Learner</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.demoButton, { borderColor: COLORS.accent, flexDirection: 'row', alignItems: 'center' }]}
-              onPress={() => fillDemo('Administrator')}
-            >
-              <Ionicons name="shield-checkmark-outline" size={14} color={COLORS.accent} style={{ marginRight: 6 }} />
-              <Text style={[styles.demoButtonText, { color: COLORS.accent }]}>Demo Admin</Text>
-            </TouchableOpacity>
-          </View>
+        {/* Divider separator */}
+        <View style={styles.dividerRow}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>OR CONTINUE WITH</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        {/* Social SSO Grid */}
+        <View style={styles.socialGrid}>
+          <TouchableOpacity style={styles.socialBtn} onPress={() => handleSocialLogin('Google')}>
+            <Ionicons name="logo-google" size={20} color="#EA4335" />
+            <Text style={styles.socialBtnText}>Google</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.socialBtn} onPress={() => handleSocialLogin('GitHub')}>
+            <Ionicons name="logo-github" size={20} color={COLORS.white} />
+            <Text style={styles.socialBtnText}>GitHub</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.socialBtn} onPress={() => handleSocialLogin('Microsoft')}>
+            <Ionicons name="logo-windows" size={20} color="#00A4EF" />
+            <Text style={styles.socialBtnText}>Microsoft</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Footer links */}
+        <View style={styles.footerRow}>
+          <Text style={styles.footerLabel}>New to FlowPilot?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.footerAction}> Create Account</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -154,138 +162,172 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingVertical: 40,
+    paddingTop: 32,
+    paddingBottom: 40,
   },
-  headerContainer: {
-    alignItems: 'center',
+  header: {
     marginBottom: 32,
-  },
-  logoImage: {
-    width: 90,
-    height: 90,
-    marginBottom: 16,
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
-    color: COLORS.primary,
+    fontWeight: '900',
+    color: COLORS.white,
     fontFamily: FONTS.black,
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 14,
     color: COLORS.textLight,
-    textAlign: 'center',
-    marginTop: 6,
-    paddingHorizontal: 20,
-    fontFamily: FONTS.regular,
+    lineHeight: 20,
   },
-  formCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: 20,
-    padding: 24,
-    ...SHADOWS.medium,
+  formContainer: {
+    marginBottom: 24,
   },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.textDark,
-    marginBottom: 8,
+  label: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: COLORS.textLight,
+    marginBottom: 6,
+    letterSpacing: 0.5,
   },
-  passwordHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  forgotText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: COLORS.secondary,
-  },
-  inputContainer: {
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#1E293B',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.border,
+    marginBottom: 16,
     height: 52,
-    paddingHorizontal: 12,
-    marginBottom: 20,
+    paddingHorizontal: 16,
   },
   inputIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
-  textInput: {
+  input: {
     flex: 1,
     height: '100%',
+    color: COLORS.white,
     fontSize: 15,
-    color: COLORS.textDark,
   },
-  eyeButton: {
-    paddingHorizontal: 8,
+  togglePassword: {
+    padding: 4,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
   },
-  loginButton: {
-    height: 52,
+  checkboxActive: {
+    backgroundColor: COLORS.secondary,
+    borderColor: COLORS.secondary,
+  },
+  checkboxText: {
+    fontSize: 13,
+    color: COLORS.textLight,
+  },
+  forgotText: {
+    fontSize: 13,
+    color: COLORS.secondary,
+    fontWeight: '700',
+  },
+  submitButton: {
     borderRadius: 12,
     overflow: 'hidden',
-    marginTop: 8,
-    ...SHADOWS.light,
+    marginBottom: 20,
+    ...SHADOWS.medium,
   },
   gradientButton: {
-    flex: 1,
+    height: 52,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  loginButtonText: {
+  submitButtonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
   },
-  registerContainer: {
+  biometricButton: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  registerText: {
-    fontSize: 14,
-    color: COLORS.textLight,
-  },
-  registerLink: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.secondary,
-  },
-  demoSection: {
-    marginTop: 32,
     alignItems: 'center',
-  },
-  demoTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: COLORS.textLight,
-    marginBottom: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  demoButtonsContainer: {
-    flexDirection: 'row',
     justifyContent: 'center',
+    paddingVertical: 12,
   },
-  demoButton: {
-    borderWidth: 1.5,
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    marginHorizontal: 8,
-    backgroundColor: COLORS.white,
-  },
-  demoButtonText: {
+  biometricText: {
+    color: COLORS.textLight,
     fontSize: 12,
     fontWeight: '700',
+    marginLeft: 8,
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: COLORS.border,
+  },
+  dividerText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: COLORS.textLight,
+    marginHorizontal: 12,
+    letterSpacing: 1,
+  },
+  socialGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 32,
+  },
+  socialBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.cardBg,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 10,
+    height: 48,
+    marginHorizontal: 4,
+  },
+  socialBtnText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: '700',
+    marginLeft: 6,
+  },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerLabel: {
+    fontSize: 14,
+    color: COLORS.textLight,
+  },
+  footerAction: {
+    fontSize: 14,
+    color: COLORS.secondary,
+    fontWeight: '800',
   },
 });
