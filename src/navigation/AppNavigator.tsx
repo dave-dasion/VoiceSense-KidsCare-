@@ -14,11 +14,10 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import AuthSettingsScreen from '../screens/auth/AuthSettingsScreen';
 
-// Workspace Setup Screens
-import CreateWorkspaceScreen from '../screens/workspace/CreateWorkspaceScreen';
-import InviteMembersScreen from '../screens/workspace/InviteMembersScreen';
-import ChooseSubscriptionScreen from '../screens/workspace/ChooseSubscriptionScreen';
-import WelcomeScreen from '../screens/workspace/WelcomeScreen';
+// User & Auth Management Screens
+import ProfileSettingsScreen from '../screens/auth/ProfileSettingsScreen';
+import TeamManagementScreen from '../screens/auth/TeamManagementScreen';
+import RolesPermissionsScreen from '../screens/auth/RolesPermissionsScreen';
 
 // Dashboard Screens
 import DashboardHomeScreen from '../screens/dashboard/DashboardHomeScreen';
@@ -36,6 +35,7 @@ import ScheduleTriggerScreen from '../screens/triggers/ScheduleTriggerScreen';
 import WebhookTriggerScreen from '../screens/triggers/WebhookTriggerScreen';
 import ApiTriggerScreen from '../screens/triggers/ApiTriggerScreen';
 import EmailTriggerScreen from '../screens/triggers/EmailTriggerScreen';
+import FileUploadTriggerScreen from '../screens/triggers/FileUploadTriggerScreen';
 import DatabaseTriggerScreen from '../screens/triggers/DatabaseTriggerScreen';
 import ManualTriggerScreen from '../screens/triggers/ManualTriggerScreen';
 import EventTriggerScreen from '../screens/triggers/EventTriggerScreen';
@@ -56,7 +56,7 @@ export default function AppNavigator() {
           cardStyle: { backgroundColor: COLORS.background },
         }}
       >
-        {/* Module 1: Auth & Workspace Screens */}
+        {/* Module 1: Auth & User Management Screens */}
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -66,12 +66,9 @@ export default function AppNavigator() {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="AuthSettings" component={AuthSettingsScreen} />
-        
-        {/* Workspace Management Screens */}
-        <Stack.Screen name="CreateWorkspace" component={CreateWorkspaceScreen} />
-        <Stack.Screen name="InviteMembers" component={InviteMembersScreen} />
-        <Stack.Screen name="ChooseSubscription" component={ChooseSubscriptionScreen} />
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+        <Stack.Screen name="TeamManagement" component={TeamManagementScreen} />
+        <Stack.Screen name="RolesPermissions" component={RolesPermissionsScreen} />
         
         {/* Module 2: Dashboard Screens */}
         <Stack.Screen name="DashboardHome" component={DashboardHomeScreen} />
@@ -89,6 +86,7 @@ export default function AppNavigator() {
         <Stack.Screen name="WebhookTrigger" component={WebhookTriggerScreen} />
         <Stack.Screen name="ApiTrigger" component={ApiTriggerScreen} />
         <Stack.Screen name="EmailTrigger" component={EmailTriggerScreen} />
+        <Stack.Screen name="FileUploadTrigger" component={FileUploadTriggerScreen} />
         <Stack.Screen name="DatabaseTrigger" component={DatabaseTriggerScreen} />
         <Stack.Screen name="ManualTrigger" component={ManualTriggerScreen} />
         <Stack.Screen name="EventTrigger" component={EventTriggerScreen} />

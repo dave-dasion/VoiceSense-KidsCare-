@@ -119,11 +119,11 @@ export default function DashboardHomeScreen({ navigation }: any) {
             style={styles.createWsMenuItem}
             onPress={() => {
               setShowWorkspaceMenu(false);
-              navigation.navigate('CreateWorkspace');
+              navigation.navigate('TeamManagement');
             }}
           >
-            <Ionicons name="add" size={16} color={COLORS.white} />
-            <Text style={styles.createWsMenuText}>Create New Workspace</Text>
+            <Ionicons name="people-outline" size={16} color={COLORS.white} />
+            <Text style={styles.createWsMenuText}>Manage Team Members</Text>
           </TouchableOpacity>
         </View>
       )}

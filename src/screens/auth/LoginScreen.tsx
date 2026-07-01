@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }: any) {
 
   const handleSocialLogin = (platform: string) => {
     Alert.alert('SSO Authentication', `Authenticating with ${platform} Single Sign-On...`, [
-      { text: 'OK', onPress: () => navigation.navigate('CreateWorkspace') }
+      { text: 'OK', onPress: () => navigation.navigate('DashboardHome') }
     ]);
   };
 

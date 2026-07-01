@@ -57,7 +57,7 @@ export default function OtpVerificationScreen({ route, navigation }: any) {
       return;
     }
     Alert.alert('Authentication Successful', 'OTP successfully verified.', [
-      { text: 'Continue', onPress: () => navigation.navigate('CreateWorkspace') }
+      { text: 'Continue', onPress: () => navigation.navigate('DashboardHome') }
     ]);
   };
 

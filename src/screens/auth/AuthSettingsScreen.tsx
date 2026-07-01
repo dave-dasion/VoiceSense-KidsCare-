@@ -95,6 +95,43 @@ export default function AuthSettingsScreen({ navigation }: any) {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* User & Workspace Management Section */}
+        <Text style={styles.sectionTitle}>User & Team Management</Text>
+        <View style={[styles.settingsGroup, { marginBottom: 20 }]}>
+          <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('ProfileSettings')}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="person-outline" size={20} color={COLORS.secondary} style={styles.rowIcon} />
+              <View>
+                <Text style={styles.rowTitle}>Profile & Settings</Text>
+                <Text style={styles.rowSub}>Update your personal profile, email and preferences.</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.textLight} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('TeamManagement')}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="people-outline" size={20} color={COLORS.secondary} style={styles.rowIcon} />
+              <View>
+                <Text style={styles.rowTitle}>Team Management</Text>
+                <Text style={styles.rowSub}>Invite members and manage team directory.</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.textLight} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('RolesPermissions')}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="lock-open-outline" size={20} color={COLORS.secondary} style={styles.rowIcon} />
+              <View>
+                <Text style={styles.rowTitle}>User Roles & Permissions</Text>
+                <Text style={styles.rowSub}>Configure access controls and workflow rights.</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.textLight} />
+          </TouchableOpacity>
+        </View>
+
         {/* Toggle options */}
         <Text style={styles.sectionTitle}>Account Access Protection</Text>
         <View style={styles.settingsGroup}>

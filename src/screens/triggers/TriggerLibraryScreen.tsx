@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 interface TriggerItem {
   id: string;
   name: string;
-  category: 'Schedule' | 'Webhook' | 'API' | 'Email' | 'Database' | 'Manual' | 'Event';
+  category: 'Schedule' | 'Webhook' | 'API' | 'Email' | 'Database' | 'Manual' | 'Event' | 'File';
   icon: string;
   desc: string;
   screenName: string;
@@ -63,6 +63,15 @@ export default function TriggerLibraryScreen({ navigation }: any) {
       popular: true,
     },
     {
+      id: 'trig-8',
+      name: 'File Upload Listener',
+      category: 'File',
+      icon: 'document-attach-outline',
+      desc: 'Execute actions automatically when files are uploaded to Google Drive, S3, or Dropbox.',
+      screenName: 'FileUploadTrigger',
+      popular: true,
+    },
+    {
       id: 'trig-5',
       name: 'Database Change Listener',
       category: 'Database',
@@ -88,7 +97,7 @@ export default function TriggerLibraryScreen({ navigation }: any) {
     },
   ];
 
-  const categories = ['All', 'Schedule', 'Webhook', 'API', 'Email', 'Database', 'Manual', 'Event'];
+  const categories = ['All', 'Schedule', 'Webhook', 'API', 'Email', 'File', 'Database', 'Manual', 'Event'];
 
   const filteredTriggers = triggers
     .filter((trig) => trig.name.toLowerCase().includes(searchQuery.toLowerCase()))

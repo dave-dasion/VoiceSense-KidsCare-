@@ -38,7 +38,7 @@ export default function EmailVerificationScreen({ route, navigation }: any) {
 
   const handleVerifyCheck = () => {
     Alert.alert('Verification Successful', 'Your email has been verified.', [
-      { text: 'Continue', onPress: () => navigation.navigate('CreateWorkspace') }
+      { text: 'Continue', onPress: () => navigation.navigate('DashboardHome') }
     ]);
   };
 
