@@ -19,7 +19,7 @@ export default function WelcomeScreen({ navigation }: any) {
       title: 'Build your first workflow',
       desc: 'Link a trigger block to an automated webhook action.',
       icon: 'git-network-outline',
-      action: () => navigation.navigate('WorkflowHome'),
+      action: () => navigation.navigate('DashboardHome'),
     },
     {
       title: 'Browse integrations library',
@@ -74,7 +74,7 @@ export default function WelcomeScreen({ navigation }: any) {
         ))}
 
         {/* Go to Dashboard Button */}
-        <TouchableOpacity style={styles.submitBtn} onPress={() => navigation.navigate('WorkflowHome')}>
+        <TouchableOpacity style={styles.submitBtn} onPress={() => navigation.navigate('DashboardHome')}>
           <LinearGradient
             colors={[COLORS.secondary, COLORS.accent]}
             start={{ x: 0, y: 0 }}

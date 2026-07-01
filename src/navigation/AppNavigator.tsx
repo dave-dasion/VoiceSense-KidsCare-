@@ -20,7 +20,17 @@ import InviteMembersScreen from '../screens/workspace/InviteMembersScreen';
 import ChooseSubscriptionScreen from '../screens/workspace/ChooseSubscriptionScreen';
 import WelcomeScreen from '../screens/workspace/WelcomeScreen';
 
-// Dashboard & Workflow Canvas Screens
+// Dashboard Screens
+import DashboardHomeScreen from '../screens/dashboard/DashboardHomeScreen';
+import RecentWorkflowsScreen from '../screens/dashboard/RecentWorkflowsScreen';
+import QuickCreateScreen from '../screens/dashboard/QuickCreateScreen';
+import RunningWorkflowsScreen from '../screens/dashboard/RunningWorkflowsScreen';
+import FailedWorkflowsScreen from '../screens/dashboard/FailedWorkflowsScreen';
+import AiSuggestionsScreen from '../screens/dashboard/AiSuggestionsScreen';
+import UsageSummaryScreen from '../screens/dashboard/UsageSummaryScreen';
+import ActivityFeedScreen from '../screens/dashboard/ActivityFeedScreen';
+
+// Workflow Core Screens
 import WorkflowHomeScreen from '../screens/workflow/WorkflowHomeScreen';
 import WorkflowCanvasScreen from '../screens/workflow/WorkflowCanvasScreen';
 
@@ -53,6 +63,16 @@ export default function AppNavigator() {
         <Stack.Screen name="ChooseSubscription" component={ChooseSubscriptionScreen} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         
+        {/* Module 2: Dashboard Screens */}
+        <Stack.Screen name="DashboardHome" component={DashboardHomeScreen} />
+        <Stack.Screen name="RecentWorkflows" component={RecentWorkflowsScreen} />
+        <Stack.Screen name="QuickCreate" component={QuickCreateScreen} />
+        <Stack.Screen name="RunningWorkflows" component={RunningWorkflowsScreen} />
+        <Stack.Screen name="FailedWorkflows" component={FailedWorkflowsScreen} />
+        <Stack.Screen name="AiSuggestions" component={AiSuggestionsScreen} />
+        <Stack.Screen name="UsageSummary" component={UsageSummaryScreen} />
+        <Stack.Screen name="ActivityFeed" component={ActivityFeedScreen} />
+
         {/* Workflow Core Screens */}
         <Stack.Screen name="WorkflowHome" component={WorkflowHomeScreen} />
         <Stack.Screen name="WorkflowCanvas" component={WorkflowCanvasScreen} />
