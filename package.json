@@ -10,8 +10,8 @@
     "test:watch": "jest --watchAll",
     "test": "jest",
     "test:win": "bin/test.cmd",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./app",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx ./app --fix",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx ./src --fix",
     "typescript": "tsc --noEmit",
     "ci": "yarn lint && yarn typescript && yarn test --coverage"
   },
@@ -21,7 +21,7 @@
     ],
     "preset": "jest-expo",
     "collectCoverageFrom": [
-      "app/**/*.(js|jsx|ts|tsx)"
+      "src/**/*.(js|jsx|ts|tsx)"
     ],
     "globalSetup": "./global-setup.js"
   },
