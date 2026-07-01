@@ -30,6 +30,16 @@ import AiSuggestionsScreen from '../screens/dashboard/AiSuggestionsScreen';
 import UsageSummaryScreen from '../screens/dashboard/UsageSummaryScreen';
 import ActivityFeedScreen from '../screens/dashboard/ActivityFeedScreen';
 
+// Trigger Screens
+import TriggerLibraryScreen from '../screens/triggers/TriggerLibraryScreen';
+import ScheduleTriggerScreen from '../screens/triggers/ScheduleTriggerScreen';
+import WebhookTriggerScreen from '../screens/triggers/WebhookTriggerScreen';
+import ApiTriggerScreen from '../screens/triggers/ApiTriggerScreen';
+import EmailTriggerScreen from '../screens/triggers/EmailTriggerScreen';
+import DatabaseTriggerScreen from '../screens/triggers/DatabaseTriggerScreen';
+import ManualTriggerScreen from '../screens/triggers/ManualTriggerScreen';
+import EventTriggerScreen from '../screens/triggers/EventTriggerScreen';
+
 // Workflow Core Screens
 import WorkflowHomeScreen from '../screens/workflow/WorkflowHomeScreen';
 import WorkflowCanvasScreen from '../screens/workflow/WorkflowCanvasScreen';
@@ -72,6 +82,16 @@ export default function AppNavigator() {
         <Stack.Screen name="AiSuggestions" component={AiSuggestionsScreen} />
         <Stack.Screen name="UsageSummary" component={UsageSummaryScreen} />
         <Stack.Screen name="ActivityFeed" component={ActivityFeedScreen} />
+
+        {/* Module 4: Triggers Screens */}
+        <Stack.Screen name="TriggerLibrary" component={TriggerLibraryScreen} />
+        <Stack.Screen name="ScheduleTrigger" component={ScheduleTriggerScreen} />
+        <Stack.Screen name="WebhookTrigger" component={WebhookTriggerScreen} />
+        <Stack.Screen name="ApiTrigger" component={ApiTriggerScreen} />
+        <Stack.Screen name="EmailTrigger" component={EmailTriggerScreen} />
+        <Stack.Screen name="DatabaseTrigger" component={DatabaseTriggerScreen} />
+        <Stack.Screen name="ManualTrigger" component={ManualTriggerScreen} />
+        <Stack.Screen name="EventTrigger" component={EventTriggerScreen} />
 
         {/* Workflow Core Screens */}
         <Stack.Screen name="WorkflowHome" component={WorkflowHomeScreen} />

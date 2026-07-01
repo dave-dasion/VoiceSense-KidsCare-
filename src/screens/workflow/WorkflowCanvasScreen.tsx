@@ -343,6 +343,18 @@ export default function WorkflowCanvasScreen({ route, navigation }: any) {
               />
             </View>
 
+            {selectedNode.type === 'Trigger' && (
+              <TouchableOpacity
+                style={[styles.saveSheetButton, { backgroundColor: '#1E293B', marginBottom: 12, borderWidth: 1, borderColor: COLORS.border }]}
+                onPress={() => {
+                  setActiveSheet(null);
+                  navigation.navigate('TriggerLibrary');
+                }}
+              >
+                <Text style={[styles.saveSheetButtonText, { color: COLORS.secondary }]}>Open Trigger Library Settings</Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity style={styles.saveSheetButton} onPress={handleApplyNodeSettings}>
               <Text style={styles.saveSheetButtonText}>Save Node Configurations</Text>
             </TouchableOpacity>
