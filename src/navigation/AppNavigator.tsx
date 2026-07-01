@@ -19,6 +19,10 @@ import ChangePasswordScreen from '../screens/profile/ChangePasswordScreen';
 import UserListScreen from '../screens/admin/UserListScreen';
 import UserRoleManagementScreen from '../screens/admin/UserRoleManagementScreen';
 
+// Workflow Builder Screens
+import WorkflowHomeScreen from '../screens/workflow/WorkflowHomeScreen';
+import WorkflowCanvasScreen from '../screens/workflow/WorkflowCanvasScreen';
+
 // Dashboard Module Sub-screens
 import MyLearningScreen from '../screens/dashboard/MyLearningScreen';
 import AssignedCoursesScreen from '../screens/dashboard/AssignedCoursesScreen';
@@ -333,6 +337,16 @@ function DrawerNavigator() {
           title: 'Dashboard',
           drawerIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
+          )
+        }} 
+      />
+      <Drawer.Screen 
+        name="WorkflowHome" 
+        component={WorkflowHomeScreen} 
+        options={{ 
+          title: 'Workflow Builder',
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="git-branch-outline" size={size} color={color} />
           )
         }} 
       />
@@ -676,6 +690,9 @@ export default function AppNavigator() {
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="UserProfile" component={UserProfileScreen} />
             <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+            
+            {/* Workflow Builder Sub-screens */}
+            <Stack.Screen name="WorkflowCanvas" component={WorkflowCanvasScreen} />
             
             {/* Dashboard Sub-screens */}
             <Stack.Screen name="MyLearning" component={MyLearningScreen} />
